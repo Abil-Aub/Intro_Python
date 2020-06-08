@@ -3,19 +3,30 @@ import tempfile
 import argparse
 import json
 
+storage_path = os.path.join(tempfile.gettempdir(), 'storage.data')
 
 def do_storage(key, value=None):
-    storage_path = os.path.join(tempfile.gettempdir(), 'storage.data')
-    with open(storage_path, 'r') as f:
-        data = json.load(f)
-
-    if(value==None):
-        if(key in data):
-            print(", ".join(data[key]))
+    if os.path.exists(storage_path):
+        with open(storage_path, 'r') as f:
+            data = json.load(f)
+            
+        if(value==None):
+            do_read_data(key, data)
         else:
-            print("")
+            do_store_data(key, value, data)
     else:
-        do_store_data(key, value, data)
+        if(value==None):
+            print("")
+        else:
+            data = {}
+            do_store_data(key, value, data)
+
+
+def do_read_data(key, data):
+    if(key in data):
+        print(", ".join(data[key]))
+    else:
+        print("")
 
 
 def do_store_data(key, value, data):
@@ -24,7 +35,6 @@ def do_store_data(key, value, data):
     else:
         data[key] = [value]
 
-    storage_path = os.path.join(tempfile.gettempdir(), 'storage.data')
     with open(storage_path, 'w') as f:
         json.dump(data, f)
 
@@ -44,3 +54,4 @@ def do_smth():
 
 if __name__ == "__main__":
     do_smth()
+

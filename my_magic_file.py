@@ -36,7 +36,7 @@ class File():
 
     def read(self):
         with open(self._path, 'r') as f:
-            return f.readline()
+            return f.read()
 
     def write(self, text):
         with open(self._path, 'w') as f:

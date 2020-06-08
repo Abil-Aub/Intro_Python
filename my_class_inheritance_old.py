@@ -55,23 +55,22 @@ def check(lst):
 
 
 def get_car(row):
-    if row[0] == 'car' and all((row[1], row[3])) and check(row[3]):
-        try:
-            return Car(row[1], row[3], float(row[5]), int(row[2]))
-        except ValueError:
-            pass
-
-    elif row[0] == 'truck' and all((row[1], row[3])) and check(row[3]):
-        try:
-            return Truck(row[1], row[3], float(row[5]), row[4])
-        except ValueError:
-            pass
-
-    elif row[0] == 'spec_machine' and all((row[1], row[3], row[6])) and check(row[3]):
-        try:
-            return SpecMachine(row[1], row[3], float(row[5]), row[6])
-        except ValueError:
-            pass
+    try:
+        if (float(row[5]) <= 0) or (not check(row[3])) or \
+           row[1]:
+            raise ValueError
+        if(row[0]=='car'):
+            if not (int(row[2]) <=0 ):
+                raise ValueError
+            return Car(row[1], row[3], row[5], row[2])
+        elif(row[0]=='truck'):
+            return Truck(row[1], row[3], row[5], row[4])
+        elif(row[0]=='spec_machine'):
+            if not row[6]:
+                raise ValueError
+            return SpecMachine(row[1], row[3], row[5], row[6])
+    except:
+        pass
 
         
 def get_car_list(csv_filename):
@@ -81,9 +80,8 @@ def get_car_list(csv_filename):
         reader = csv.reader(csv_fd, delimiter=';')
         next(reader)  # skip titles
         for row in reader:
-            if len(row) == 7:
-                next_car = get_car(row)
-                if(next_car):
-                    car_list.append(next_car)
+            next_car = get_car(row)
+            if(next_car):
+                car_list.append(next_car)
 
     return car_list

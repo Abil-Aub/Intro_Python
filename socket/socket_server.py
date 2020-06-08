@@ -14,6 +14,7 @@ while True:
         break
     # process data
     print(data.decode("utf8"))
+    conn.send("ok\n\n".encode("utf8"))
 
 conn.close()
 sock.close()
